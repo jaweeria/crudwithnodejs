@@ -1,0 +1,486 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Crud App</title>
+    <style>
+         table {
+        width: 80%;
+        margin: auto;
+        border-collapse: collapse;
+        margin-top: 20px;
+      }
+
+      th, td {
+        border: 1px solid #ccc;
+        padding: 10px;
+        text-align: left;
+      }
+
+      th {
+        background-color: #f2f2f2;
+      }
+
+      tr:nth-child(even) {
+        background-color: #f9f9f9;
+      }
+
+      button {
+        padding: 8px 16px;
+        background-color: #007BFF;
+        border: none;
+        color: white;
+        border-radius: 4px;
+        cursor: pointer;
+      }
+
+      button:hover {
+        background-color: #0056b3;
+      }
+     .edit-btn{
+          padding: 8px 16px;
+        background-color: #886800;
+        border: none;
+        color: white;
+        border-radius: 4px;
+        cursor: pointer;
+      }
+         .edit-btn:hover {
+        background-color: #dda610;
+      }
+           .del-btn{
+          padding: 8px 16px;
+        background-color: #ac180d;
+        border: none;
+        color: white;
+        border-radius: 4px;
+        cursor: pointer;
+      }
+         .del-btn:hover {
+        background-color: #cf0808;
+      }
+      .modal {
+  display: none;
+  position: fixed;
+  z-index: 999;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  background-color: rgba(0,0,0,0.4);
+}
+
+.modal-content {
+  background-color: #fff;
+  margin: 10% auto;
+  padding: 20px;
+  border-radius: 8px;
+  width: 300px;
+  box-shadow: 0 5px 10px rgba(0,0,0,0.3);
+}
+
+.close {
+  float: right;
+  font-size: 24px;
+  font-weight: bold;
+  cursor: pointer;
+}
+#imgPreview{
+  width: 50px;
+  height:50px;
+  border-radius: 50px;
+}
+#editimgPreview{
+  width: 50px;
+  height:50px;
+  border-radius: 50px;
+}
+
+
+    </style>
+  </head>
+  <body>
+    <div
+      style="display: flex; justify-content: center;flex-direction: column;gap: 1px;"
+    >
+      <span style="display: flex; justify-content: center; width: 100%"
+        ><h3>Patient Information Form</h3></span>
+          <span style="display: flex; justify-content: center; width: 100%;">
+  <img id="imgPreview"  src="" alt=""  />
+</span>
+<span style="display: flex; justify-content: center; margin-top: 10px;">
+  <input type="file" id="photoInput" accept="image/*" />
+</span>
+      <span style="display: flex; gap: 3px;justify-content: center;"> 
+        <span style="display: flex;flex-direction: column;"
+          ><h6>Name:</h6>
+          <input type="text" id="name" style="display: flex;width: 250px; height: 25px;" />
+        </span>
+        <span style="display: flex;flex-direction: column;"
+          ><h6>Practice:</h6>
+          <input type="text" id="practice" style="display: flex;width: 250px; height: 25px;" />
+        </span>
+    </span> 
+      <span style="display: flex; gap: 3px;justify-content: center;"> 
+        <span style="display: flex;flex-direction: column;"
+          ><h6>Allergy Type:</h6>
+          <input type="text" id="allerygType" style="display: flex;width: 250px; height: 25px;" />
+        </span>
+        <span style="display: flex;flex-direction: column;"
+          ><h6>No of Injection:</h6>
+          <input type="number" id="noofInjection" style="display: flex;width: 250px; height: 25px;" />
+        </span>
+    </span> 
+        <span style="display: flex; gap: 3px;justify-content: center;"> 
+        <span style="display: flex;flex-direction: column;"
+          ><h6>Test Type:</h6>
+          <input type="text" id="testType" style="display: flex;width: 250px; height: 25px;" />
+        </span>
+        <span style="display: flex;flex-direction: column;"
+          ><h6>Medical Insurance:</h6>
+         <select id="medicalInsurance" style="display: flex; width: 250px; height: 30px;">
+  <option value="" disabled selected>Select Insurance</option>
+  <option value="true">True</option>
+  <option value="false">False</option>
+</select>
+        </span>
+    </span> 
+    <span style="display: flex;justify-content: center; margin-top: 20px;"><button id="addPatientBtn">Add patient</button></span>
+    
+
+    </span>
+       
+    </div>
+    <!-- region get data -->
+    <div style="display: flex;  flex-direction: column;width: 100%;" >
+         <span style="display: flex; justify-content: center; width: 100%  ;">
+            <h3>Patient Info</h3>
+    </span>  
+    <div class="table">     
+      <table id="patientTable" >
+         <thead>
+    <tr>
+      <th>Profile</th>
+    <th>Name</th>
+    <th>Practice</th>
+    <th>No of Injection</th>
+    <th>Allergy Type</th>
+    <th>Test Type</th>
+    <th>Medical Insurance</th>
+    <th>Actions</th>
+  </tr>
+  </thead>
+  <tr>
+
+    <td>
+      <button class="edit-btn">Edit</button>
+      <button class="del-btn">Delete</button>
+    </td>
+  </tr>
+  <tr>
+    <!-- <td>Centro comercial Moctezuma</td>
+    <td>Francisco Chang</td>
+    <td>Mexico</td>
+    <td>Insect</td> -->
+    <td>
+      <button class="edit-btn" >Edit</button>
+      <button class="del-btn">Delete</button>
+    </td>
+  </tr>
+</table></div>
+          
+    
+  
+
+  
+    </div>
+   <!-- Modal -->
+<div id="editModal" class="modal">
+  <div class="modal-content">
+    <span class="close">&times;</span>
+    <h3>Edit Patient Info</h3>
+         <span style="display: flex; justify-content: center; width: 100%;">
+  <img id="editimgPreview"   src="" alt=""  />
+</span>
+<span style="display: flex; justify-content: center; margin-top: 10px;">
+  <input type="file" id="editphotoInput" accept="image/*" />
+</span>
+  <label style="margin-top:10px ;">Name:</label>
+<input  style="margin-top:10px ;" type="text" id="editName"><br><br>
+<label>Practice:</label>
+<input type="text" id="editPractice"><br><br>
+<label>No of Injection:</label>
+<input type="number" id="editNoofInjection"><br><br>
+<label>Allergy Type:</label>
+<input type="text" id="editAllergyType"><br><br>
+<label>Test Type</label>
+<input type="" id="edittestType"><br><br>
+<label>Medical Insurance:</label>
+<select id="editmedicalInsurance" style="display: flex; width: 250px; height: 30px;">
+  <option value="" disabled selected>Select Insurance</option>
+  <option value="true">True</option>
+  <option value="false">False</option>
+</select><br><br>
+
+    <button id="saveEdit">Update</button>
+  </div>
+
+</div>
+  </body>
+  <script>
+  const modal = document.getElementById("editModal");
+  const closeBtn = document.querySelector(".close");
+  const saveBtn = document.getElementById("saveEdit");
+  const tbody = document.querySelector('#patientTable tbody');
+ const token = localStorage.getItem("token"); 
+ console.log(token,"contains")
+// . Preview the image in the browser:
+document.getElementById('photoInput').addEventListener('change', function () {
+  const file = this.files[0];
+  if (file) {
+    const reader = new FileReader();
+    reader.onload = function (e) {
+      document.getElementById('imgPreview').src = e.target.result;
+    };
+    reader.readAsDataURL(file);
+  }
+});
+// For edit modal. Preview the image in the browser:
+document.getElementById('editphotoInput').addEventListener('change', function () {
+  const file = this.files[0];
+  if (file) {
+    const reader = new FileReader();
+    reader.onload = function (e) {
+      document.getElementById('editimgPreview').src = e.target.result;
+    };
+    reader.readAsDataURL(file);
+  }
+});
+//Post Data
+// Handle Add Patient
+document.getElementById("addPatientBtn").addEventListener("click", async () => {
+  // Get values from input fields
+  const Name = document.getElementById("name").value.trim();
+  const Practice = document.getElementById("practice").value.trim();
+  const AllergyType = document.getElementById("allerygType").value.trim();
+  const NoofInjection = document.getElementById("noofInjection").value;
+  const TestType = document.getElementById("testType").value.trim();
+  const MedicalInsurance = document.getElementById("medicalInsurance").value;
+const selectedFile = document.getElementById("photoInput").files[0];
+console.log(selectedFile)
+  // Optional: validate
+  if (!Name || !Practice || !AllergyType || !NoofInjection) {
+    alert("Please fill out all fields.");
+    return;
+  }
+const formData = new FormData();
+formData.append("Name", Name);
+formData.append("Practice", Practice);
+formData.append("AllergyType", AllergyType);
+formData.append("NoofInjection", NoofInjection);
+formData.append("TestType", TestType);
+formData.append("MedicalInsurance", MedicalInsurance);
+// formData.append("photo", selectedFile); // 'selectedFile' is the File object from <input type="file">
+const fileInput = document.getElementById("photoInput");
+if (fileInput.files[0]) {
+  formData.append("photo", fileInput.files[0]);
+}
+
+fetch("http://localhost:5001/add", {
+  method: "POST",
+  headers: {
+        "Authorization": `Bearer ${token}` // ✅ Set token in Authorization header
+      },
+  body: formData
+})
+.then(async res => {
+  const data = await res.json();  // Wait for JSON
+  if (res.status === 400) {
+    alert("Bad Request: Invalid input.");
+    return;
+  } else if (res.status === 201) {
+    alert("Patient added successfully!");
+    
+    // Clear form
+    document.getElementById("name").value = "";
+    document.getElementById("practice").value = "";
+    document.getElementById("allerygType").value = "";
+    document.getElementById("noofInjection").value = "";
+    document.getElementById("testType").value = "";
+    document.getElementById("medicalInsurance").value = "";
+    document.getElementById("imgPreview").src = "";
+
+    fetchData(); // Reload table
+  } else {
+      alert("Failed to add patient. Please check your backend.");
+    }
+})
+.catch(err => console.error("Upload error:", err));
+
+});
+
+
+
+//region fetch data
+const fetchData = async () =>{
+try {
+    const res = await fetch('http://localhost:5001/',{method:'GET',
+     headers: {
+        "Authorization": `Bearer ${token}` // ✅ Set token in Authorization header
+      },
+  })
+    const data = await res.json()
+
+    const newData = data?.reverse();
+
+    tbody.innerHTML='';
+    newData.forEach((item,i)=>{
+
+        const row = document.createElement('tr');
+        console.log(item)
+        row.innerHTML=`
+        
+         <td><img src="http://localhost:5001${item?.photo}" style="width: 60px; height: 60px; object-fit: cover;" /></td>
+        <td>${item?.Name}</td>
+        <td>${item?.Practice}</td>
+        <td>${item?.NoofInjection}</td>
+        <td>${item?.AllergyType}</td>
+        <td>${item?.TestType===undefined?"":item?.TestType}</td>
+        <td>${item?.MedicalInsurance===undefined?"":item?.MedicalInsurance}</td>
+         <td>
+            <button class="edit-btn" data-id="${item._id
+}">Edit</button>
+            <button class="delete-btn" data-id="${item._id
+}">Delete</button>
+          </td>
+       `;
+          tbody.appendChild(row);
+          // Attach edit button click event after creating row
+row.querySelector('.edit-btn').addEventListener('click', (e) => {
+    console.log("Edit button clicked");
+    currentRow = e.target.closest('tr');
+    currentId = e.target.getAttribute('data-id');
+
+
+    const cells = currentRow.querySelectorAll('td');
+    const imageSrc = currentRow.querySelector("td img").src;
+    document.getElementById("editimgPreview").src = imageSrc;
+    document.getElementById("editphotoInput").value;
+    document.getElementById("editName").value = cells[1].innerText;
+    document.getElementById("editPractice").value = cells[2].innerText;
+    document.getElementById("editNoofInjection").value = cells[3].innerText;
+    document.getElementById("editAllergyType").value = cells[4].innerText;
+    document.getElementById("edittestType").value = cells[5].innerText;
+    document.getElementById("editmedicalInsurance").value = cells[6].innerText;
+    
+    modal.style.display = "block";
+
+  
+   
+});
+ // region del data
+row.querySelector('.delete-btn').addEventListener('click', async (e) => {
+  const idToDelete = e.target.getAttribute('data-id');
+
+  if (confirm("Are you sure you want to delete this record?")) {
+    try {
+      const res = await fetch(`http://localhost:5001/delete/${idToDelete}`, {
+        method: "DELETE",
+        headers: {
+        "Authorization": `Bearer ${token}` 
+        }
+      });
+
+      if (res.ok) {
+        alert("Deleted Successfully");
+        fetchData(); // Refresh the table after delete
+      } else {
+        alert("Failed to delete. Server responded with error.");
+      }
+    } catch (err) {
+      console.error("Error deleting:", err);
+      alert("Error sending delete request.");
+    }
+  }
+});
+    })
+    
+    
+} catch (error) {
+    console.error("Error fetching data:", error); 
+}
+
+}
+  let currentRow;
+
+
+  // Run on load
+  window.onload = fetchData;
+//   // Close modal
+  closeBtn.onclick = function () {
+    modal.style.display = "none";
+  };
+
+  // Save edits
+   // Save changes via PUT API
+   document.getElementById("saveEdit").addEventListener("click", async () => {
+  const updatedData = {
+    photo:document.getElementById("editimgPreview").value,
+    Name: document.getElementById("editName").value,
+    Practice: document.getElementById("editPractice").value,
+    NoofInjection: document.getElementById("editNoofInjection").value,
+    AllergyType: document.getElementById("editAllergyType").value,
+    MedicalInsurance: document.getElementById("editmedicalInsurance").value,
+   testType: document.getElementById("edittestType").value
+  };
+  const formData = new FormData();
+  const fileInput = document.getElementById("editphotoInput");
+if (fileInput.files[0]) {
+  formData.append("photo", fileInput.files[0]);
+}
+formData.append("Name", updatedData.Name);
+formData.append("Practice", updatedData.Practice);
+formData.append("AllergyType", updatedData.AllergyType);
+formData.append("NoofInjection", updatedData.NoofInjection);
+formData.append("TestType", updatedData.testType);
+formData.append("MedicalInsurance", updatedData.MedicalInsurance);
+
+// formData.append("photo", selectedFile); // 'selectedFile' is the File object from <input type="file">
+
+
+  try {
+    const res = await fetch(`http://localhost:5001/update/${currentId}`, {
+      method: "PUT",
+       headers: {
+        "Authorization": `Bearer ${token}` 
+        } ,
+
+      body: formData
+    })
+    const data = await res.json();
+console.log("Uploaded:", data);
+
+if (res.ok) {
+  fetchData(); // reload table instead of directly updating innerText (more reliable)
+  modal.style.display = "none";
+} else {
+  alert("Failed to update. Server responded with error.");
+}
+  } catch (err) {
+    console.error("Error updating:", err);
+    alert("Error sending update request.");
+  }
+});
+
+ 
+ //close
+  window.onclick = function (event) {
+    if (event.target === modal) {
+      modal.style.display = "none";
+    }
+  };
+</script>
+
+</html>

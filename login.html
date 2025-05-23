@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>CRUD Web App</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body,
+      html {
+        height: 100%;
+        font-family: "Inter", sans-serif;
+      }
+
+      .container {
+        width: 100%;
+        height: 100vh;
+        background: linear-gradient(135deg, #560ad1, #f8a5f1);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+
+      .login {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 100%;
+      }
+
+      .main {
+        background: rgba(255, 255, 255, 0.1);
+        backdrop-filter: blur(10px);
+        border-radius: 20px;
+        padding: 40px;
+        width: 100%;
+        max-width: 400px;
+        color: white;
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.25);
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+      }
+
+      .main h1 {
+        text-align: center;
+        margin-bottom: 10px;
+        font-size: 32px;
+      }
+
+      h5 {
+        margin-bottom: 5px;
+        font-weight: 500;
+      }
+
+      .input {
+        width: 100%;
+        padding: 10px;
+        background: transparent;
+        border: none;
+        border-bottom: 2px solid white;
+        color: white;
+        font-size: 14px;
+        outline: none;
+        transition: border-color 0.3s;
+      }
+
+      .input:focus {
+        border-bottom: 2px solid #ddd;
+      }
+
+      .btn {
+        padding: 10px 0;
+        width: 100%;
+        background-color: white;
+        color: #560ad1;
+        font-weight: 600;
+        border: none;
+        border-radius: 25px;
+        cursor: pointer;
+        transition: background 0.3s, color 0.3s;
+      }
+
+      .btn:hover {
+        background-color: #eee;
+        color: #4400aa;
+      }
+
+      a {
+        color: white;
+        font-size: 13px;
+        text-decoration: underline;
+        align-self: flex-end;
+        margin-top: -10px;
+        transition: color 0.3s;
+      }
+
+      a:hover {
+        color: #ddd;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <div class="login">
+        <div class="main">
+          <h1>Login</h1>
+          <div>
+            <h5>Email</h5>
+            <input
+              id="email"
+              type="email"
+              required
+              class="input"
+              placeholder="you@example.com"
+            />
+          </div>
+          <div>
+            <h5>Password</h5>
+            <input
+              id="password"
+              type="password"
+              required
+              class="input"
+              placeholder="Enter your password"
+            />
+          </div>
+          <a href="#">Forget password?</a>
+          <button id="btn" class="btn">Login</button>
+        </div>
+      </div>
+    </div>
+  </body>
+  <script>
+    document.getElementById("btn").addEventListener("click", async () => {
+      const email = document.getElementById("email").value.trim();
+      const password = document.getElementById("password").value.trim();
+
+      const jsonData = {
+        email,
+        password,
+      };
+
+      try {
+        const resp = await fetch("http://localhost:5001/login", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(jsonData),
+        });
+        console.log("Raw response object:", resp);
+        if (resp.status === 401) {
+          alert("Invalid email or password");
+          return;
+        }
+
+        const data = await resp.json(); // ✅ MUST await this
+
+        console.log("Login response:", data); // ✅ This should show the token
+        alert("Login Successful");
+
+        // Optional: Save token to localStorage
+        localStorage.setItem("token", data.token);
+
+        // Redirect or do something
+        window.location.href = "index.html";
+      } catch (error) {
+        console.error("Login failed:", error);
+        alert("An error occurred during login");
+      }
+    });
+  </script>
+</html>
