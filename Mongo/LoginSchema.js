@@ -6,7 +6,7 @@ const loginSchema = new mongoose.Schema({
   password: String,
 });
 
-// ✅ FIXED: Use .methods instead of .method
+// ✅ method for generating token
 loginSchema.methods.getJWTToken = function () {
   return jwt.sign({ id: this._id, email: this.email }, process.env.JWT_SECRET, {
     expiresIn: process.env.JWT_EXPIRE,
